@@ -10,27 +10,6 @@
 <meta name="theme-color" content="#ffffff">
 
 <style>
-   /* =========================
-   PAGE FADE IN
-========================= */
-
-body {
-    animation: pageFadeIn 0.8s ease-out both;
-}
-
-@keyframes pageFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(18px);
-        filter: blur(4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
-    }
-}
     * {
         box-sizing: border-box;
         margin: 0;
@@ -41,6 +20,10 @@ body {
         scroll-behavior: smooth;
     }
 
+    /* =========================
+       PAGE LOAD ANIMATION
+    ========================= */
+
     body {
         font-family:
             -apple-system,
@@ -49,9 +32,45 @@ body {
             "Noto Sans KR",
             Arial,
             sans-serif;
+
         color: #111;
         background: #fff;
         line-height: 1.6;
+
+        /* 처음에는 살짝 흐리고 아래에 위치 */
+        opacity: 0;
+        transform: translateY(18px);
+        filter: blur(4px);
+
+        /* 페이지가 열리면 자연스럽게 등장 */
+        animation: pageFadeIn 0.8s cubic-bezier(.22, 1, .36, 1) forwards;
+    }
+
+    @keyframes pageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+            filter: blur(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+    }
+
+    /*
+        사용자가 애니메이션 감소를 설정한 경우
+        애니메이션을 끕니다.
+    */
+    @media (prefers-reduced-motion: reduce) {
+        body {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            animation: none;
+        }
     }
 
     a {
@@ -547,8 +566,11 @@ body {
         </a>
 
         <div class="nav-links">
+
             <a href="#download">다운로드</a>
+
             <a href="#features">기능</a>
+
             <a href="#howto">사용법</a>
 
             <a
@@ -558,6 +580,7 @@ body {
             >
                 GitHub
             </a>
+
         </div>
 
     </nav>
