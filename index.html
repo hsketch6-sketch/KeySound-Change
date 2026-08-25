@@ -104,18 +104,15 @@
     ========================= */
 
     .hero {
-        max-width: 1120px;
+        max-width: 850px;
         margin: 0 auto;
-        padding: 86px 28px 72px;
-
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 70px;
-        align-items: center;
+        padding: 110px 28px 100px;
+        text-align: center;
     }
 
     .hero-text {
-        max-width: 540px;
+        max-width: 700px;
+        margin: 0 auto;
     }
 
     .badge {
@@ -143,7 +140,7 @@
     }
 
     h1 {
-        font-size: clamp(44px, 6vw, 70px);
+        font-size: clamp(44px, 7vw, 76px);
         line-height: 1.05;
         letter-spacing: -4px;
         margin-bottom: 24px;
@@ -154,13 +151,14 @@
         color: #666;
         font-size: 17px;
         line-height: 1.8;
-        max-width: 500px;
-        margin-bottom: 32px;
+        max-width: 570px;
+        margin: 0 auto 32px;
     }
 
     .buttons {
         display: flex;
         gap: 10px;
+        justify-content: center;
         flex-wrap: wrap;
     }
 
@@ -206,86 +204,6 @@
 
     .button-secondary:hover {
         border-color: #111;
-    }
-
-    /* =========================
-       KEYBOARD VISUAL
-    ========================= */
-
-    .keyboard-area {
-        display: flex;
-        justify-content: center;
-    }
-
-    .keyboard {
-        width: 100%;
-        max-width: 480px;
-        padding: 22px;
-
-        border: 1px solid #dedede;
-        border-radius: 13px;
-        background: #f8f8f8;
-
-        box-shadow:
-            0 20px 60px rgba(0,0,0,.08);
-    }
-
-    .keyboard-top {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        color: #999;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    .keys {
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        gap: 7px;
-    }
-
-    .key {
-        aspect-ratio: 1 / .82;
-        border: 1px solid #d4d4d4;
-        border-radius: 5px;
-
-        background: #fff;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 11px;
-        font-weight: 700;
-        color: #555;
-
-        box-shadow: 0 2px 0 #ccc;
-
-        animation: keyFloat 3s infinite ease-in-out;
-    }
-
-    .key:nth-child(3n) {
-        animation-delay: .4s;
-    }
-
-    .key:nth-child(4n) {
-        animation-delay: .8s;
-    }
-
-    .key.space {
-        grid-column: span 5;
-    }
-
-    @keyframes keyFloat {
-        0%, 100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-2px);
-        }
     }
 
     /* =========================
@@ -533,17 +451,12 @@
         }
 
         .hero {
-            grid-template-columns: 1fr;
-            gap: 45px;
-            padding-top: 60px;
+            padding-top: 70px;
+            padding-bottom: 70px;
         }
 
         h1 {
             letter-spacing: -2.5px;
-        }
-
-        .keyboard-area {
-            order: 2;
         }
 
         .download-inner {
@@ -595,18 +508,6 @@
             padding-left: 20px;
             padding-right: 20px;
         }
-
-        .keyboard {
-            padding: 14px;
-        }
-
-        .keys {
-            gap: 4px;
-        }
-
-        .key {
-            font-size: 8px;
-        }
     }
 </style>
 </head>
@@ -628,7 +529,14 @@
             <a href="#download">다운로드</a>
             <a href="#features">기능</a>
             <a href="#howto">사용법</a>
-            <a href="https://github.com/" target="_blank">GitHub</a>
+
+            <a
+                href="https://github.com/hsketch6-sketch/KeySound-Change"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                GitHub
+            </a>
         </div>
 
     </nav>
@@ -665,9 +573,9 @@
 
                 <a
                     class="button button-primary"
-                    href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                    href="https://github.com/hsketch6-sketch/KeySound-Change"
                     target="_blank"
-                    id="heroDownload"
+                    rel="noopener noreferrer"
                 >
                     Windows용 다운로드
                     <span>↓</span>
@@ -679,64 +587,6 @@
                 >
                     사용법 보기
                 </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- 키보드 비주얼 -->
-
-        <div class="keyboard-area">
-
-            <div class="keyboard">
-
-                <div class="keyboard-top">
-                    <span>KEYSOUND</span>
-                    <span>READY</span>
-                </div>
-
-                <div class="keys">
-
-                    <div class="key">Q</div>
-                    <div class="key">W</div>
-                    <div class="key">E</div>
-                    <div class="key">R</div>
-                    <div class="key">T</div>
-                    <div class="key">Y</div>
-                    <div class="key">U</div>
-                    <div class="key">I</div>
-                    <div class="key">O</div>
-                    <div class="key">P</div>
-
-                    <div class="key">A</div>
-                    <div class="key">S</div>
-                    <div class="key">D</div>
-                    <div class="key">F</div>
-                    <div class="key">G</div>
-                    <div class="key">H</div>
-                    <div class="key">J</div>
-                    <div class="key">K</div>
-                    <div class="key">L</div>
-                    <div class="key">;</div>
-
-                    <div class="key">Z</div>
-                    <div class="key">X</div>
-                    <div class="key">C</div>
-                    <div class="key">V</div>
-                    <div class="key">B</div>
-                    <div class="key">N</div>
-                    <div class="key">M</div>
-                    <div class="key">,</div>
-                    <div class="key">.</div>
-                    <div class="key">/</div>
-
-                    <div class="key space">SPACE</div>
-                    <div class="key">←</div>
-                    <div class="key">↓</div>
-                    <div class="key">→</div>
-
-                </div>
 
             </div>
 
@@ -768,8 +618,9 @@
             <div class="download-action">
 
                 <a
-                    href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                    href="https://github.com/hsketch6-sketch/KeySound-Change"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     다운로드
                     <span class="arrow">›</span>
@@ -795,7 +646,6 @@
         <p class="section-description">
             복잡한 설정 없이 원하는 소리를 바로 사용할 수 있습니다.
         </p>
-
 
         <div class="features">
 
@@ -859,7 +709,6 @@
             처음 사용하는 경우에도 몇 단계만 거치면 됩니다.
         </p>
 
-
         <div class="steps">
 
             <div class="step">
@@ -914,17 +763,22 @@
         <div class="final-inner">
 
             <div>
-                <h2>지금 시작해보세요.</h2>
+
+                <h2>
+                    지금 시작해보세요.
+                </h2>
 
                 <p>
                     KeySound는 무료로 사용할 수 있습니다.
                 </p>
+
             </div>
 
             <a
                 class="button final-button"
-                href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                href="https://github.com/hsketch6-sketch/KeySound-Change"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 KeySound 다운로드
                 <span>↓</span>
@@ -956,54 +810,6 @@
     </div>
 
 </footer>
-
-
-<script>
-    /*
-        GitHub Releases 주소를 한 곳에서 관리할 수 있습니다.
-
-        나중에 실제 주소가 생기면 아래 URL만 변경하세요.
-    */
-
-    const DOWNLOAD_URL =
-        "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest";
-
-
-    // 모든 다운로드 버튼에 같은 주소 적용
-    document.querySelectorAll(
-        'a[href*="YOUR_USERNAME"]'
-    ).forEach(button => {
-        button.href = DOWNLOAD_URL;
-    });
-
-
-    // 간단한 키보드 애니메이션
-    const keys = document.querySelectorAll(".key");
-
-    document.addEventListener("keydown", (event) => {
-
-        if (event.repeat) return;
-
-        const keyName = event.key.toUpperCase();
-
-        keys.forEach(key => {
-
-            if (key.textContent.trim() === keyName) {
-
-                key.style.transform = "translateY(2px)";
-                key.style.boxShadow = "0 0 0 #ccc";
-
-                setTimeout(() => {
-                    key.style.transform = "";
-                    key.style.boxShadow = "";
-                }, 100);
-
-            }
-
-        });
-
-    });
-</script>
 
 </body>
 </html>
