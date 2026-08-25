@@ -10,6 +10,27 @@
 <meta name="theme-color" content="#ffffff">
 
 <style>
+   /* =========================
+   PAGE FADE IN
+========================= */
+
+body {
+    animation: pageFadeIn 0.8s ease-out both;
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
     * {
         box-sizing: border-box;
         margin: 0;
