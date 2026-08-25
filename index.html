@@ -42,12 +42,10 @@
         background: #fff;
         line-height: 1.6;
 
-        /* 페이지 시작 애니메이션 */
         animation: pageEnter 0.85s cubic-bezier(.22, 1, .36, 1) both;
     }
 
     @keyframes pageEnter {
-
         from {
             opacity: 0;
             transform: translateY(20px);
@@ -59,7 +57,6 @@
             transform: translateY(0);
             filter: blur(0);
         }
-
     }
 
     a {
@@ -509,72 +506,6 @@
 
 
     /* =========================
-       BIG DOWNLOAD
-    ========================= */
-
-    .final-download {
-        max-width: 1120px;
-
-        margin:
-            20px
-            auto
-            90px;
-
-        padding:
-            0
-            28px;
-    }
-
-    .final-inner {
-        background: #111;
-
-        color: #fff;
-
-        border-radius: 8px;
-
-        padding:
-            58px
-            50px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 30px;
-    }
-
-    .final-inner h2 {
-        font-size: 32px;
-
-        letter-spacing: -1.5px;
-
-        margin-bottom: 7px;
-    }
-
-    .final-inner p {
-        color: #aaa;
-
-        font-size: 14px;
-    }
-
-    .final-button {
-        background: #fff;
-
-        color: #111;
-
-        border: none;
-
-        min-width: 180px;
-    }
-
-    .final-button:hover {
-        background: #eee;
-    }
-
-
-    /* =========================
        FOOTER
     ========================= */
 
@@ -655,20 +586,6 @@
             grid-template-columns: 1fr;
         }
 
-        .final-inner {
-            flex-direction: column;
-
-            align-items: flex-start;
-
-            padding:
-                40px
-                30px;
-        }
-
-        .final-button {
-            width: 100%;
-        }
-
         .footer-inner {
             flex-direction: column;
 
@@ -691,8 +608,7 @@
             padding-right: 20px;
         }
 
-        .download-card,
-        .final-download {
+        .download-card {
             padding-left: 20px;
             padding-right: 20px;
         }
@@ -750,7 +666,6 @@
 
         <div class="nav-links">
 
-            <!-- 다운로드는 실제 Releases로 이동 -->
             <a
                 href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
                 target="_blank"
@@ -759,17 +674,14 @@
                 다운로드
             </a>
 
-            <!-- 기능은 페이지 내부 -->
             <a href="#features">
                 기능
             </a>
 
-            <!-- 사용법은 페이지 내부 -->
             <a href="#howto">
                 사용법
             </a>
 
-            <!-- GitHub 저장소 -->
             <a
                 href="https://github.com/hsketch6-sketch/KeySound-Change"
                 target="_blank"
@@ -829,9 +741,6 @@
 
             <div class="buttons">
 
-
-                <!-- 실제 다운로드 -->
-
                 <a
                     class="button button-primary"
                     href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
@@ -846,8 +755,6 @@
                 </a>
 
 
-                <!-- 사용법 -->
-
                 <a
                     class="button button-secondary"
                     href="#howto"
@@ -856,7 +763,6 @@
                     사용법 보기
 
                 </a>
-
 
             </div>
 
@@ -898,7 +804,6 @@
 
             <div class="download-action">
 
-
                 <a
                     href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
                     target="_blank"
@@ -910,7 +815,6 @@
                     <span class="arrow">›</span>
 
                 </a>
-
 
             </div>
 
@@ -925,7 +829,6 @@
     ========================= -->
 
     <section id="features">
-
 
         <h2 class="section-title">
 
@@ -947,18 +850,12 @@
             <div class="feature">
 
                 <div class="feature-number">
-
                     01
-
                 </div>
 
-
                 <h3>
-
                     원하는 소리 사용
-
                 </h3>
-
 
                 <p>
 
@@ -974,18 +871,12 @@
             <div class="feature">
 
                 <div class="feature-number">
-
                     02
-
                 </div>
 
-
                 <h3>
-
                     낮은 지연시간
-
                 </h3>
-
 
                 <p>
 
@@ -1001,18 +892,12 @@
             <div class="feature">
 
                 <div class="feature-number">
-
                     03
-
                 </div>
 
-
                 <h3>
-
                     간단한 사용법
-
                 </h3>
-
 
                 <p>
 
@@ -1036,7 +921,6 @@
 
     <section id="howto">
 
-
         <h2 class="section-title">
 
             사용 방법
@@ -1057,18 +941,12 @@
             <div class="step">
 
                 <div class="step-number">
-
                     STEP 01
-
                 </div>
 
-
                 <h3>
-
                     KeySound 다운로드
-
                 </h3>
-
 
                 <p>
 
@@ -1084,18 +962,12 @@
             <div class="step">
 
                 <div class="step-number">
-
                     STEP 02
-
                 </div>
 
-
                 <h3>
-
                     프로그램 다운로드
-
                 </h3>
-
 
                 <p>
 
@@ -1111,18 +983,12 @@
             <div class="step">
 
                 <div class="step-number">
-
                     STEP 03
-
                 </div>
 
-
                 <h3>
-
                     소리 파일 선택
-
                 </h3>
-
 
                 <p>
 
@@ -1140,7 +1006,7 @@
     </section>
 
 
-
+</main>
 
 
 
@@ -1150,26 +1016,17 @@
 
 <footer>
 
-
     <div class="footer-inner">
 
-
         <div class="footer-logo">
-
             KeySound
-
         </div>
-
 
         <div>
-
             © 2026 KeySound. All rights reserved.
-
         </div>
 
-
     </div>
-
 
 </footer>
 
