@@ -6,10 +6,19 @@
 
 <title>KeySound — 키보드에 소리를 더하다</title>
 
-<meta name="description" content="KeySound는 원하는 MP3 또는 WAV 파일을 키보드 소리로 사용할 수 있는 Windows 프로그램입니다.">
+<meta
+    name="description"
+    content="KeySound는 원하는 MP3 또는 WAV 파일을 키보드 소리로 사용할 수 있는 Windows 프로그램입니다."
+>
+
 <meta name="theme-color" content="#ffffff">
 
 <style>
+
+    /* =========================
+       RESET
+    ========================= */
+
     * {
         box-sizing: border-box;
         margin: 0;
@@ -19,10 +28,6 @@
     html {
         scroll-behavior: smooth;
     }
-
-    /* =========================
-       PAGE LOAD ANIMATION
-    ========================= */
 
     body {
         font-family:
@@ -37,20 +42,16 @@
         background: #fff;
         line-height: 1.6;
 
-        /* 처음에는 살짝 흐리고 아래에 위치 */
-        opacity: 0;
-        transform: translateY(18px);
-        filter: blur(4px);
-
-        /* 페이지가 열리면 자연스럽게 등장 */
-        animation: pageFadeIn 0.8s cubic-bezier(.22, 1, .36, 1) forwards;
+        /* 페이지 시작 애니메이션 */
+        animation: pageEnter 0.85s cubic-bezier(.22, 1, .36, 1) both;
     }
 
-    @keyframes pageFadeIn {
+    @keyframes pageEnter {
+
         from {
             opacity: 0;
-            transform: translateY(18px);
-            filter: blur(4px);
+            transform: translateY(20px);
+            filter: blur(5px);
         }
 
         to {
@@ -58,19 +59,7 @@
             transform: translateY(0);
             filter: blur(0);
         }
-    }
 
-    /*
-        사용자가 애니메이션 감소를 설정한 경우
-        애니메이션을 끕니다.
-    */
-    @media (prefers-reduced-motion: reduce) {
-        body {
-            opacity: 1;
-            transform: none;
-            filter: none;
-            animation: none;
-        }
     }
 
     a {
@@ -83,6 +72,7 @@
         -webkit-tap-highlight-color: transparent;
     }
 
+
     /* =========================
        HEADER
     ========================= */
@@ -90,17 +80,24 @@
     header {
         width: 100%;
         height: 76px;
+
         border-bottom: 1px solid #eee;
-        background: rgba(255,255,255,.96);
+
+        background: rgba(255, 255, 255, .96);
+
         position: sticky;
         top: 0;
+
         z-index: 100;
+
         backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
 
     .nav {
         max-width: 1120px;
         height: 100%;
+
         margin: auto;
         padding: 0 28px;
 
@@ -122,22 +119,25 @@
     .nav-links {
         display: flex;
         gap: 34px;
+
         align-items: center;
+
         font-size: 14px;
     }
 
     .nav-links a {
         color: #333;
-        transition: .2s;
+
+        transition:
+            color .2s,
+            transform .2s;
     }
 
     .nav-links a:hover {
         color: #000;
+        transform: translateY(-1px);
     }
 
-    .nav-download {
-        font-weight: 700;
-    }
 
     /* =========================
        HERO
@@ -145,8 +145,14 @@
 
     .hero {
         max-width: 850px;
+
         margin: 0 auto;
-        padding: 110px 28px 100px;
+
+        padding:
+            110px
+            28px
+            100px;
+
         text-align: center;
     }
 
@@ -157,70 +163,101 @@
 
     .badge {
         display: inline-flex;
+
         align-items: center;
         gap: 7px;
 
         padding: 7px 12px;
+
         border: 1px solid #e6e6e6;
         border-radius: 999px;
 
         font-size: 12px;
         font-weight: 700;
+
         color: #444;
 
         margin-bottom: 22px;
+
         background: #fafafa;
     }
 
     .badge-dot {
         width: 7px;
         height: 7px;
+
         border-radius: 50%;
+
         background: #111;
     }
 
     h1 {
         font-size: clamp(44px, 7vw, 76px);
+
         line-height: 1.05;
+
         letter-spacing: -4px;
+
         margin-bottom: 24px;
+
         font-weight: 850;
     }
 
     .hero-description {
         color: #666;
+
         font-size: 17px;
+
         line-height: 1.8;
+
         max-width: 570px;
-        margin: 0 auto 32px;
+
+        margin:
+            0
+            auto
+            32px;
     }
+
+
+    /* =========================
+       BUTTONS
+    ========================= */
 
     .buttons {
         display: flex;
+
         gap: 10px;
+
         justify-content: center;
+
         flex-wrap: wrap;
     }
 
     .button {
         display: inline-flex;
+
         align-items: center;
         justify-content: center;
+
         gap: 9px;
 
         height: 48px;
+
         padding: 0 20px;
 
         border-radius: 5px;
+
         border: 1px solid #111;
 
         font-size: 14px;
+
         font-weight: 700;
 
         transition:
             transform .2s,
             background .2s,
-            color .2s;
+            color .2s,
+            border-color .2s;
     }
 
     .button:hover {
@@ -239,6 +276,7 @@
     .button-secondary {
         background: #fff;
         color: #111;
+
         border-color: #ddd;
     }
 
@@ -246,62 +284,94 @@
         border-color: #111;
     }
 
+
     /* =========================
        DOWNLOAD BAR
     ========================= */
 
     .download-card {
         max-width: 1120px;
-        margin: 0 auto 90px;
-        padding: 0 28px;
+
+        margin:
+            0
+            auto
+            90px;
+
+        padding:
+            0
+            28px;
     }
 
     .download-inner {
         border: 1px solid #ddd;
+
         border-radius: 7px;
+
         overflow: hidden;
 
         display: grid;
-        grid-template-columns: 1fr auto;
+
+        grid-template-columns:
+            1fr
+            auto;
+
         align-items: center;
 
         min-height: 116px;
     }
 
     .download-info {
-        padding: 25px 30px;
+        padding:
+            25px
+            30px;
     }
 
     .download-title {
         font-size: 18px;
+
         font-weight: 800;
+
         margin-bottom: 4px;
     }
 
     .download-sub {
         color: #777;
+
         font-size: 13px;
     }
 
     .download-action {
         height: 100%;
+
         min-width: 180px;
+
         border-left: 1px solid #ddd;
 
         display: flex;
+
         align-items: center;
         justify-content: center;
     }
 
     .download-action a {
         font-size: 14px;
+
         font-weight: 800;
+
+        transition:
+            transform .2s;
+    }
+
+    .download-action a:hover {
+        transform: translateX(2px);
     }
 
     .arrow {
         margin-left: 8px;
+
         font-size: 18px;
     }
+
 
     /* =========================
        SECTION
@@ -309,21 +379,30 @@
 
     section {
         max-width: 1120px;
+
         margin: 0 auto;
-        padding: 80px 28px;
+
+        padding:
+            80px
+            28px;
     }
 
     .section-title {
         font-size: 28px;
+
         letter-spacing: -1.5px;
+
         margin-bottom: 12px;
     }
 
     .section-description {
         color: #777;
+
         font-size: 15px;
+
         margin-bottom: 42px;
     }
+
 
     /* =========================
        FEATURES
@@ -331,14 +410,20 @@
 
     .features {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
         gap: 18px;
     }
 
     .feature {
         border: 1px solid #e5e5e5;
+
         padding: 28px;
+
         border-radius: 7px;
+
         min-height: 190px;
 
         transition:
@@ -348,26 +433,36 @@
 
     .feature:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(0,0,0,.06);
+
+        box-shadow:
+            0 12px 35px
+            rgba(0, 0, 0, .06);
     }
 
     .feature-number {
         font-size: 12px;
+
         color: #999;
+
         font-weight: 800;
+
         margin-bottom: 20px;
     }
 
     .feature h3 {
         font-size: 17px;
+
         margin-bottom: 9px;
     }
 
     .feature p {
         color: #777;
+
         font-size: 14px;
+
         line-height: 1.7;
     }
+
 
     /* =========================
        HOW TO USE
@@ -375,31 +470,43 @@
 
     .steps {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
         gap: 35px;
     }
 
     .step {
         border-top: 2px solid #111;
+
         padding-top: 20px;
     }
 
     .step-number {
         font-size: 12px;
+
         font-weight: 800;
+
         color: #999;
+
         margin-bottom: 15px;
     }
 
     .step h3 {
         font-size: 18px;
+
         margin-bottom: 8px;
     }
 
     .step p {
         color: #777;
+
         font-size: 14px;
+
+        line-height: 1.7;
     }
+
 
     /* =========================
        BIG DOWNLOAD
@@ -407,37 +514,58 @@
 
     .final-download {
         max-width: 1120px;
-        margin: 20px auto 90px;
-        padding: 0 28px;
+
+        margin:
+            20px
+            auto
+            90px;
+
+        padding:
+            0
+            28px;
     }
 
     .final-inner {
         background: #111;
+
         color: #fff;
+
         border-radius: 8px;
-        padding: 58px 50px;
+
+        padding:
+            58px
+            50px;
 
         display: flex;
+
         align-items: center;
+
         justify-content: space-between;
+
         gap: 30px;
     }
 
     .final-inner h2 {
         font-size: 32px;
+
         letter-spacing: -1.5px;
+
         margin-bottom: 7px;
     }
 
     .final-inner p {
         color: #aaa;
+
         font-size: 14px;
     }
 
     .final-button {
         background: #fff;
+
         color: #111;
+
         border: none;
+
         min-width: 180px;
     }
 
@@ -445,32 +573,43 @@
         background: #eee;
     }
 
+
     /* =========================
        FOOTER
     ========================= */
 
     footer {
         border-top: 1px solid #eee;
-        padding: 35px 28px;
+
+        padding:
+            35px
+            28px;
     }
 
     .footer-inner {
         max-width: 1120px;
+
         margin: auto;
 
         display: flex;
+
         align-items: center;
+
         justify-content: space-between;
 
         color: #999;
+
         font-size: 12px;
     }
 
     .footer-logo {
         color: #222;
+
         font-weight: 800;
+
         font-size: 14px;
     }
+
 
     /* =========================
        MOBILE
@@ -505,7 +644,9 @@
 
         .download-action {
             border-left: none;
+
             border-top: 1px solid #ddd;
+
             min-height: 65px;
         }
 
@@ -516,8 +657,12 @@
 
         .final-inner {
             flex-direction: column;
+
             align-items: flex-start;
-            padding: 40px 30px;
+
+            padding:
+                40px
+                30px;
         }
 
         .final-button {
@@ -526,10 +671,13 @@
 
         .footer-inner {
             flex-direction: column;
+
             gap: 10px;
+
             align-items: flex-start;
         }
     }
+
 
     @media (max-width: 500px) {
 
@@ -548,17 +696,52 @@
             padding-left: 20px;
             padding-right: 20px;
         }
+
+        h1 {
+            font-size: 48px;
+        }
+
+        .hero-description {
+            font-size: 15px;
+        }
     }
+
+
+    /* =========================
+       ACCESSIBILITY
+    ========================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            animation: none;
+        }
+
+        .button,
+        .feature,
+        .nav-links a,
+        .download-action a {
+            transition: none;
+        }
+    }
+
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =========================
      HEADER
 ========================= -->
 
 <header>
+
     <nav class="nav">
 
         <a href="#" class="logo">
@@ -567,12 +750,26 @@
 
         <div class="nav-links">
 
-            <a href="#download">다운로드</a>
+            <!-- 다운로드는 실제 Releases로 이동 -->
+            <a
+                href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                다운로드
+            </a>
 
-            <a href="#features">기능</a>
+            <!-- 기능은 페이지 내부 -->
+            <a href="#features">
+                기능
+            </a>
 
-            <a href="#howto">사용법</a>
+            <!-- 사용법은 페이지 내부 -->
+            <a href="#howto">
+                사용법
+            </a>
 
+            <!-- GitHub 저장소 -->
             <a
                 href="https://github.com/hsketch6-sketch/KeySound-Change"
                 target="_blank"
@@ -584,53 +781,82 @@
         </div>
 
     </nav>
+
 </header>
 
 
 <!-- =========================
-     HERO
+     MAIN
 ========================= -->
 
 <main>
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
 
     <div class="hero">
 
         <div class="hero-text">
 
             <div class="badge">
+
                 <span class="badge-dot"></span>
+
                 Windows 10 / 11
+
             </div>
 
+
             <h1>
+
                 키보드에<br>
+
                 소리를 더하다.
+
             </h1>
 
+
             <p class="hero-description">
+
                 원하는 MP3 또는 WAV 파일을 선택하고
                 키보드를 눌러보세요.
                 KeySound가 입력에 맞춰 소리를 재생합니다.
+
             </p>
+
 
             <div class="buttons">
 
+
+                <!-- 실제 다운로드 -->
+
                 <a
                     class="button button-primary"
-                    href="https://github.com/hsketch6-sketch/KeySound-Change"
+                    href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
+
                     Windows용 다운로드
+
                     <span>↓</span>
+
                 </a>
+
+
+                <!-- 사용법 -->
 
                 <a
                     class="button button-secondary"
                     href="#howto"
                 >
+
                     사용법 보기
+
                 </a>
+
 
             </div>
 
@@ -639,42 +865,59 @@
     </div>
 
 
+
     <!-- =========================
-         DOWNLOAD BAR
+         DOWNLOAD
     ========================= -->
 
-    <div class="download-card" id="download">
+    <div
+        class="download-card"
+        id="download"
+    >
 
         <div class="download-inner">
+
 
             <div class="download-info">
 
                 <div class="download-title">
+
                     KeySound 다운로드
+
                 </div>
 
+
                 <div class="download-sub">
+
                     Windows 10 / 11 · 64-bit · 무료
+
                 </div>
 
             </div>
 
+
             <div class="download-action">
 
+
                 <a
-                    href="https://github.com/hsketch6-sketch/KeySound-Change"
+                    href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
+
                     다운로드
+
                     <span class="arrow">›</span>
+
                 </a>
+
 
             </div>
 
         </div>
 
     </div>
+
 
 
     <!-- =========================
@@ -683,60 +926,108 @@
 
     <section id="features">
 
+
         <h2 class="section-title">
+
             필요한 것만 담았습니다.
+
         </h2>
 
+
         <p class="section-description">
+
             복잡한 설정 없이 원하는 소리를 바로 사용할 수 있습니다.
+
         </p>
+
 
         <div class="features">
 
+
             <div class="feature">
 
-                <div class="feature-number">01</div>
+                <div class="feature-number">
 
-                <h3>원하는 소리 사용</h3>
+                    01
+
+                </div>
+
+
+                <h3>
+
+                    원하는 소리 사용
+
+                </h3>
+
 
                 <p>
+
                     MP3 또는 WAV 파일을 선택해서
                     자신만의 키보드 사운드로 사용할 수 있습니다.
+
                 </p>
 
             </div>
 
 
+
             <div class="feature">
 
-                <div class="feature-number">02</div>
+                <div class="feature-number">
 
-                <h3>낮은 지연시간</h3>
+                    02
+
+                </div>
+
+
+                <h3>
+
+                    낮은 지연시간
+
+                </h3>
+
 
                 <p>
+
                     키 입력에 맞춰 소리를 빠르게 재생하도록
                     설계되었습니다.
+
                 </p>
 
             </div>
+
 
 
             <div class="feature">
 
-                <div class="feature-number">03</div>
+                <div class="feature-number">
 
-                <h3>간단한 사용법</h3>
+                    03
+
+                </div>
+
+
+                <h3>
+
+                    간단한 사용법
+
+                </h3>
+
 
                 <p>
+
                     프로그램을 실행하고 소리 파일을 선택하면
                     바로 사용할 수 있습니다.
+
                 </p>
 
             </div>
+
 
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -745,57 +1036,109 @@
 
     <section id="howto">
 
+
         <h2 class="section-title">
+
             사용 방법
+
         </h2>
 
+
         <p class="section-description">
+
             처음 사용하는 경우에도 몇 단계만 거치면 됩니다.
+
         </p>
+
 
         <div class="steps">
 
+
             <div class="step">
 
-                <div class="step-number">STEP 01</div>
+                <div class="step-number">
 
-                <h3>KeySound 실행</h3>
+                    STEP 01
+
+                </div>
+
+
+                <h3>
+
+                    KeySound 다운로드
+
+                </h3>
+
 
                 <p>
-                    다운로드한 KeySound.exe를 실행합니다.
+
+                    다운로드 버튼을 눌러
+                    GitHub Releases 페이지로 이동합니다.
+
                 </p>
 
             </div>
 
 
+
             <div class="step">
 
-                <div class="step-number">STEP 02</div>
+                <div class="step-number">
 
-                <h3>소리 파일 선택</h3>
+                    STEP 02
+
+                </div>
+
+
+                <h3>
+
+                    프로그램 다운로드
+
+                </h3>
+
 
                 <p>
-                    사용하고 싶은 MP3 또는 WAV 파일을 선택합니다.
+
+                    Releases에서 최신 버전의
+                    jeyeah.exe 파일을 찾아 다운로드합니다.
+
                 </p>
 
             </div>
 
 
+
             <div class="step">
 
-                <div class="step-number">STEP 03</div>
+                <div class="step-number">
 
-                <h3>키보드 사용</h3>
+                    STEP 03
+
+                </div>
+
+
+                <h3>
+
+                    소리 파일 선택
+
+                </h3>
+
 
                 <p>
-                    이제 키보드를 누르면 선택한 소리가 재생됩니다.
+
+                    jeyeah.exe를 실행한 뒤
+                    원하는 MP3 또는 WAV 파일을 선택합니다.
+                    이후 키보드를 누르면 선택한 소리가 재생됩니다.
+
                 </p>
 
             </div>
+
 
         </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -804,35 +1147,49 @@
 
     <div class="final-download">
 
+
         <div class="final-inner">
+
 
             <div>
 
                 <h2>
+
                     지금 시작해보세요.
+
                 </h2>
 
+
                 <p>
+
                     KeySound는 무료로 사용할 수 있습니다.
+
                 </p>
 
             </div>
 
+
             <a
                 class="button final-button"
-                href="https://github.com/hsketch6-sketch/KeySound-Change"
+                href="https://github.com/hsketch6-sketch/KeySound-Change/releases"
                 target="_blank"
                 rel="noopener noreferrer"
             >
+
                 KeySound 다운로드
+
                 <span>↓</span>
+
             </a>
+
 
         </div>
 
     </div>
 
+
 </main>
+
 
 
 <!-- =========================
@@ -841,19 +1198,29 @@
 
 <footer>
 
+
     <div class="footer-inner">
 
+
         <div class="footer-logo">
+
             KeySound
+
         </div>
 
+
         <div>
+
             © 2026 KeySound. All rights reserved.
+
         </div>
+
 
     </div>
 
+
 </footer>
+
 
 </body>
 </html>
