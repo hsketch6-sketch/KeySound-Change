@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KeySound — 키보드에 소리를 더하다</title>
+
+<meta name="description" content="KeySound는 원하는 MP3 또는 WAV 파일을 키보드 소리로 사용할 수 있는 Windows 프로그램입니다.">
+<meta name="theme-color" content="#ffffff">
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            "Noto Sans KR",
+            Arial,
+            sans-serif;
+        color: #111;
+        background: #fff;
+        line-height: 1.6;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    button,
+    a {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+        width: 100%;
+        height: 76px;
+        border-bottom: 1px solid #eee;
+        background: rgba(255,255,255,.96);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(12px);
+    }
+
+    .nav {
+        max-width: 1120px;
+        height: 100%;
+        margin: auto;
+        padding: 0 28px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 21px;
+        font-weight: 800;
+        letter-spacing: -0.7px;
+    }
+
+    .logo span {
+        font-weight: 400;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 34px;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .nav-links a {
+        color: #333;
+        transition: .2s;
+    }
+
+    .nav-links a:hover {
+        color: #000;
+    }
+
+    .nav-download {
+        font-weight: 700;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 86px 28px 72px;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 70px;
+        align-items: center;
+    }
+
+    .hero-text {
+        max-width: 540px;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 7px 12px;
+        border: 1px solid #e6e6e6;
+        border-radius: 999px;
+
+        font-size: 12px;
+        font-weight: 700;
+        color: #444;
+
+        margin-bottom: 22px;
+        background: #fafafa;
+    }
+
+    .badge-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #111;
+    }
+
+    h1 {
+        font-size: clamp(44px, 6vw, 70px);
+        line-height: 1.05;
+        letter-spacing: -4px;
+        margin-bottom: 24px;
+        font-weight: 850;
+    }
+
+    .hero-description {
+        color: #666;
+        font-size: 17px;
+        line-height: 1.8;
+        max-width: 500px;
+        margin-bottom: 32px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+
+        height: 48px;
+        padding: 0 20px;
+
+        border-radius: 5px;
+        border: 1px solid #111;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        transition:
+            transform .2s,
+            background .2s,
+            color .2s;
+    }
+
+    .button:hover {
+        transform: translateY(-2px);
+    }
+
+    .button-primary {
+        background: #111;
+        color: #fff;
+    }
+
+    .button-primary:hover {
+        background: #2b2b2b;
+    }
+
+    .button-secondary {
+        background: #fff;
+        color: #111;
+        border-color: #ddd;
+    }
+
+    .button-secondary:hover {
+        border-color: #111;
+    }
+
+    /* =========================
+       KEYBOARD VISUAL
+    ========================= */
+
+    .keyboard-area {
+        display: flex;
+        justify-content: center;
+    }
+
+    .keyboard {
+        width: 100%;
+        max-width: 480px;
+        padding: 22px;
+
+        border: 1px solid #dedede;
+        border-radius: 13px;
+        background: #f8f8f8;
+
+        box-shadow:
+            0 20px 60px rgba(0,0,0,.08);
+    }
+
+    .keyboard-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        color: #999;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .keys {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 7px;
+    }
+
+    .key {
+        aspect-ratio: 1 / .82;
+        border: 1px solid #d4d4d4;
+        border-radius: 5px;
+
+        background: #fff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 11px;
+        font-weight: 700;
+        color: #555;
+
+        box-shadow: 0 2px 0 #ccc;
+
+        animation: keyFloat 3s infinite ease-in-out;
+    }
+
+    .key:nth-child(3n) {
+        animation-delay: .4s;
+    }
+
+    .key:nth-child(4n) {
+        animation-delay: .8s;
+    }
+
+    .key.space {
+        grid-column: span 5;
+    }
+
+    @keyframes keyFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-2px);
+        }
+    }
+
+    /* =========================
+       DOWNLOAD BAR
+    ========================= */
+
+    .download-card {
+        max-width: 1120px;
+        margin: 0 auto 90px;
+        padding: 0 28px;
+    }
+
+    .download-inner {
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        overflow: hidden;
+
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+
+        min-height: 116px;
+    }
+
+    .download-info {
+        padding: 25px 30px;
+    }
+
+    .download-title {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
+
+    .download-sub {
+        color: #777;
+        font-size: 13px;
+    }
+
+    .download-action {
+        height: 100%;
+        min-width: 180px;
+        border-left: 1px solid #ddd;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .download-action a {
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .arrow {
+        margin-left: 8px;
+        font-size: 18px;
+    }
+
+    /* =========================
+       SECTION
+    ========================= */
+
+    section {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 28px;
+    }
+
+    .section-title {
+        font-size: 28px;
+        letter-spacing: -1.5px;
+        margin-bottom: 12px;
+    }
+
+    .section-description {
+        color: #777;
+        font-size: 15px;
+        margin-bottom: 42px;
+    }
+
+    /* =========================
+       FEATURES
+    ========================= */
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .feature {
+        border: 1px solid #e5e5e5;
+        padding: 28px;
+        border-radius: 7px;
+        min-height: 190px;
+
+        transition:
+            transform .2s,
+            box-shadow .2s;
+    }
+
+    .feature:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0,0,0,.06);
+    }
+
+    .feature-number {
+        font-size: 12px;
+        color: #999;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .feature h3 {
+        font-size: 17px;
+        margin-bottom: 9px;
+    }
+
+    .feature p {
+        color: #777;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    /* =========================
+       HOW TO USE
+    ========================= */
+
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 35px;
+    }
+
+    .step {
+        border-top: 2px solid #111;
+        padding-top: 20px;
+    }
+
+    .step-number {
+        font-size: 12px;
+        font-weight: 800;
+        color: #999;
+        margin-bottom: 15px;
+    }
+
+    .step h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .step p {
+        color: #777;
+        font-size: 14px;
+    }
+
+    /* =========================
+       BIG DOWNLOAD
+    ========================= */
+
+    .final-download {
+        max-width: 1120px;
+        margin: 20px auto 90px;
+        padding: 0 28px;
+    }
+
+    .final-inner {
+        background: #111;
+        color: #fff;
+        border-radius: 8px;
+        padding: 58px 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    .final-inner h2 {
+        font-size: 32px;
+        letter-spacing: -1.5px;
+        margin-bottom: 7px;
+    }
+
+    .final-inner p {
+        color: #aaa;
+        font-size: 14px;
+    }
+
+    .final-button {
+        background: #fff;
+        color: #111;
+        border: none;
+        min-width: 180px;
+    }
+
+    .final-button:hover {
+        background: #eee;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+        border-top: 1px solid #eee;
+        padding: 35px 28px;
+    }
+
+    .footer-inner {
+        max-width: 1120px;
+        margin: auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        color: #999;
+        font-size: 12px;
+    }
+
+    .footer-logo {
+        color: #222;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+        header {
+            height: 65px;
+        }
+
+        .nav {
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        .hero {
+            grid-template-columns: 1fr;
+            gap: 45px;
+            padding-top: 60px;
+        }
+
+        h1 {
+            letter-spacing: -2.5px;
+        }
+
+        .keyboard-area {
+            order: 2;
+        }
+
+        .download-inner {
+            grid-template-columns: 1fr;
+        }
+
+        .download-action {
+            border-left: none;
+            border-top: 1px solid #ddd;
+            min-height: 65px;
+        }
+
+        .features,
+        .steps {
+            grid-template-columns: 1fr;
+        }
+
+        .final-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 40px 30px;
+        }
+
+        .final-button {
+            width: 100%;
+        }
+
+        .footer-inner {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 500px) {
+
+        .hero {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        section {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .download-card,
+        .final-download {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .keyboard {
+            padding: 14px;
+        }
+
+        .keys {
+            gap: 4px;
+        }
+
+        .key {
+            font-size: 8px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+    <nav class="nav">
+
+        <a href="#" class="logo">
+            Key<span>Sound</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="#download">다운로드</a>
+            <a href="#features">기능</a>
+            <a href="#howto">사용법</a>
+            <a href="https://github.com/" target="_blank">GitHub</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<main>
+
+    <div class="hero">
+
+        <div class="hero-text">
+
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Windows 10 / 11
+            </div>
+
+            <h1>
+                키보드에<br>
+                소리를 더하다.
+            </h1>
+
+            <p class="hero-description">
+                원하는 MP3 또는 WAV 파일을 선택하고
+                키보드를 눌러보세요.
+                KeySound가 입력에 맞춰 소리를 재생합니다.
+            </p>
+
+            <div class="buttons">
+
+                <a
+                    class="button button-primary"
+                    href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                    target="_blank"
+                    id="heroDownload"
+                >
+                    Windows용 다운로드
+                    <span>↓</span>
+                </a>
+
+                <a
+                    class="button button-secondary"
+                    href="#howto"
+                >
+                    사용법 보기
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- 키보드 비주얼 -->
+
+        <div class="keyboard-area">
+
+            <div class="keyboard">
+
+                <div class="keyboard-top">
+                    <span>KEYSOUND</span>
+                    <span>READY</span>
+                </div>
+
+                <div class="keys">
+
+                    <div class="key">Q</div>
+                    <div class="key">W</div>
+                    <div class="key">E</div>
+                    <div class="key">R</div>
+                    <div class="key">T</div>
+                    <div class="key">Y</div>
+                    <div class="key">U</div>
+                    <div class="key">I</div>
+                    <div class="key">O</div>
+                    <div class="key">P</div>
+
+                    <div class="key">A</div>
+                    <div class="key">S</div>
+                    <div class="key">D</div>
+                    <div class="key">F</div>
+                    <div class="key">G</div>
+                    <div class="key">H</div>
+                    <div class="key">J</div>
+                    <div class="key">K</div>
+                    <div class="key">L</div>
+                    <div class="key">;</div>
+
+                    <div class="key">Z</div>
+                    <div class="key">X</div>
+                    <div class="key">C</div>
+                    <div class="key">V</div>
+                    <div class="key">B</div>
+                    <div class="key">N</div>
+                    <div class="key">M</div>
+                    <div class="key">,</div>
+                    <div class="key">.</div>
+                    <div class="key">/</div>
+
+                    <div class="key space">SPACE</div>
+                    <div class="key">←</div>
+                    <div class="key">↓</div>
+                    <div class="key">→</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         DOWNLOAD BAR
+    ========================= -->
+
+    <div class="download-card" id="download">
+
+        <div class="download-inner">
+
+            <div class="download-info">
+
+                <div class="download-title">
+                    KeySound 다운로드
+                </div>
+
+                <div class="download-sub">
+                    Windows 10 / 11 · 64-bit · 무료
+                </div>
+
+            </div>
+
+            <div class="download-action">
+
+                <a
+                    href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                    target="_blank"
+                >
+                    다운로드
+                    <span class="arrow">›</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FEATURES
+    ========================= -->
+
+    <section id="features">
+
+        <h2 class="section-title">
+            필요한 것만 담았습니다.
+        </h2>
+
+        <p class="section-description">
+            복잡한 설정 없이 원하는 소리를 바로 사용할 수 있습니다.
+        </p>
+
+
+        <div class="features">
+
+            <div class="feature">
+
+                <div class="feature-number">01</div>
+
+                <h3>원하는 소리 사용</h3>
+
+                <p>
+                    MP3 또는 WAV 파일을 선택해서
+                    자신만의 키보드 사운드로 사용할 수 있습니다.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-number">02</div>
+
+                <h3>낮은 지연시간</h3>
+
+                <p>
+                    키 입력에 맞춰 소리를 빠르게 재생하도록
+                    설계되었습니다.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-number">03</div>
+
+                <h3>간단한 사용법</h3>
+
+                <p>
+                    프로그램을 실행하고 소리 파일을 선택하면
+                    바로 사용할 수 있습니다.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         HOW TO USE
+    ========================= -->
+
+    <section id="howto">
+
+        <h2 class="section-title">
+            사용 방법
+        </h2>
+
+        <p class="section-description">
+            처음 사용하는 경우에도 몇 단계만 거치면 됩니다.
+        </p>
+
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">STEP 01</div>
+
+                <h3>KeySound 실행</h3>
+
+                <p>
+                    다운로드한 KeySound.exe를 실행합니다.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">STEP 02</div>
+
+                <h3>소리 파일 선택</h3>
+
+                <p>
+                    사용하고 싶은 MP3 또는 WAV 파일을 선택합니다.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">STEP 03</div>
+
+                <h3>키보드 사용</h3>
+
+                <p>
+                    이제 키보드를 누르면 선택한 소리가 재생됩니다.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FINAL DOWNLOAD
+    ========================= -->
+
+    <div class="final-download">
+
+        <div class="final-inner">
+
+            <div>
+                <h2>지금 시작해보세요.</h2>
+
+                <p>
+                    KeySound는 무료로 사용할 수 있습니다.
+                </p>
+            </div>
+
+            <a
+                class="button final-button"
+                href="https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest"
+                target="_blank"
+            >
+                KeySound 다운로드
+                <span>↓</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div class="footer-logo">
+            KeySound
+        </div>
+
+        <div>
+            © 2026 KeySound. All rights reserved.
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+    /*
+        GitHub Releases 주소를 한 곳에서 관리할 수 있습니다.
+
+        나중에 실제 주소가 생기면 아래 URL만 변경하세요.
+    */
+
+    const DOWNLOAD_URL =
+        "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases/latest";
+
+
+    // 모든 다운로드 버튼에 같은 주소 적용
+    document.querySelectorAll(
+        'a[href*="YOUR_USERNAME"]'
+    ).forEach(button => {
+        button.href = DOWNLOAD_URL;
+    });
+
+
+    // 간단한 키보드 애니메이션
+    const keys = document.querySelectorAll(".key");
+
+    document.addEventListener("keydown", (event) => {
+
+        if (event.repeat) return;
+
+        const keyName = event.key.toUpperCase();
+
+        keys.forEach(key => {
+
+            if (key.textContent.trim() === keyName) {
+
+                key.style.transform = "translateY(2px)";
+                key.style.boxShadow = "0 0 0 #ccc";
+
+                setTimeout(() => {
+                    key.style.transform = "";
+                    key.style.boxShadow = "";
+                }, 100);
+
+            }
+
+        });
+
+    });
+</script>
+
+</body>
+</html>
