@@ -982,8 +982,28 @@ static LRESULT CALLBACK WindowProc(
             // =================================================
             // ESC = EXIT
             // =================================================
+        if (vk == VK_ESCAPE)
+        {
+            // 정적(static) 변수를 사용하여 함수가 끝나도 값과 시간을 유지합니다.
+            static int escCount = 0;
+            static ULONGLONG lastEscTime = 0;
 
-            if (vk == VK_ESCAPE)
+            ULONGLONG currentTime = GetTickCount64(); // 현재 시간을 밀리초(ms) 단위로 가져옴
+
+            // 이전 입력으로부터 2000밀리초(2초)가 지났다면 카운트를 1로 초기화
+            if (currentTime - lastEscTime > 2000)
+            {
+                escCount = 1;
+            }
+            else
+            {
+                escCount++; // 2초 이내에 다시 눌렸다면 카운트 증가
+            }
+
+            lastEscTime = currentTime; // 마지막으로 누른 시간 업데이트
+
+            // 3번 연속으로 눌렸을 때만 종료 프로세스 실행
+            if (escCount >= 3)
             {
                 g_running.store(
                     false,
@@ -997,8 +1017,12 @@ static LRESULT CALLBACK WindowProc(
                     0
                 );
 
+                escCount = 0; // 카운트 초기화
                 return 0;
             }
+
+            return 0; // 3번 미만으로 눌렸을 때는 종료하지 않고 리턴
+        }
 
 
             // --------------------------------------------
