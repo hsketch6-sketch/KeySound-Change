@@ -41,6 +41,22 @@ static constexpr UINT32 OUTPUT_BITS = 32;
 
 
 // ============================================================
+// GUI
+// ============================================================
+
+// X 버튼만 표시
+static constexpr int WINDOW_WIDTH = 42;
+static constexpr int WINDOW_HEIGHT = 32;
+
+// 화면 모서리와의 거리
+static constexpr int WINDOW_MARGIN = 8;
+
+// 이 색상은 완전히 투명하게 처리됨
+static constexpr COLORREF TRANSPARENT_COLOR =
+    RGB(255, 0, 255);
+
+
+// ============================================================
 // AUDIO DATA
 // ============================================================
 
@@ -825,11 +841,181 @@ static LRESULT CALLBACK WindowProc(
     WPARAM wParam,
     LPARAM lParam)
 {
+    switch (message)
+    {
+
+    // ========================================================
+    // 배경 지우기 방지
+    // ========================================================
+
+    case WM_ERASEBKGND:
+    {
+        return 1;
+    }
+
+
+    // ========================================================
+    // PAINT
+    // ========================================================
+
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps{};
+
+        HDC hdc =
+            BeginPaint(
+                hwnd,
+                &ps
+            );
+
+
+        RECT rect{};
+
+        GetClientRect(
+            hwnd,
+            &rect
+        );
+
+
+        // ----------------------------------------------------
+        // 투명 배경
+        //
+        // 이 색상은 SetLayeredWindowAttributes에서
+        // 완전히 투명하게 처리된다.
+        // ----------------------------------------------------
+
+        HBRUSH transparentBrush =
+            CreateSolidBrush(
+                TRANSPARENT_COLOR
+            );
+
+        FillRect(
+            hdc,
+            &rect,
+            transparentBrush
+        );
+
+        DeleteObject(
+            transparentBrush
+        );
+
+
+        // ----------------------------------------------------
+        // X 버튼
+        // ----------------------------------------------------
+
+        RECT buttonRect =
+        {
+            1,
+            1,
+            WINDOW_WIDTH - 1,
+            WINDOW_HEIGHT - 1
+        };
+
+
+        HBRUSH buttonBrush =
+            CreateSolidBrush(
+                RGB(45, 45, 45)
+            );
+
+        FillRect(
+            hdc,
+            &buttonRect,
+            buttonBrush
+        );
+
+        DeleteObject(
+            buttonBrush
+        );
+
+
+        // ----------------------------------------------------
+        // X 그리기
+        // ----------------------------------------------------
+
+        HPEN pen =
+            CreatePen(
+                PS_SOLID,
+                2,
+                RGB(255, 255, 255)
+            );
+
+        HGDIOBJ oldPen =
+            SelectObject(
+                hdc,
+                pen
+            );
+
+
+        MoveToEx(
+            hdc,
+            13,
+            9,
+            nullptr
+        );
+
+        LineTo(
+            hdc,
+            WINDOW_WIDTH - 13,
+            WINDOW_HEIGHT - 9
+        );
+
+
+        MoveToEx(
+            hdc,
+            WINDOW_WIDTH - 13,
+            9,
+            nullptr
+        );
+
+        LineTo(
+            hdc,
+            13,
+            WINDOW_HEIGHT - 9
+        );
+
+
+        SelectObject(
+            hdc,
+            oldPen
+        );
+
+        DeleteObject(
+            pen
+        );
+
+
+        EndPaint(
+            hwnd,
+            &ps
+        );
+
+        return 0;
+    }
+
+
+    // ========================================================
+    // X 버튼 클릭
+    // ========================================================
+
+    case WM_LBUTTONUP:
+    {
+        g_running.store(
+            false,
+            std::memory_order_relaxed
+        );
+
+        DestroyWindow(hwnd);
+
+        return 0;
+    }
+
+
     // ========================================================
     // CLOSE
     // ========================================================
 
-    if (message == WM_CLOSE)
+    case WM_CLOSE:
     {
         g_running.store(
             false,
@@ -846,7 +1032,7 @@ static LRESULT CALLBACK WindowProc(
     // RAW INPUT
     // ========================================================
 
-    if (message == WM_INPUT)
+    case WM_INPUT:
     {
         if (
             !g_running.load(
@@ -893,41 +1079,58 @@ static LRESULT CALLBACK WindowProc(
         // MOUSE
         // ====================================================
 
-        if (raw->header.dwType == RIM_TYPEMOUSE)
+        if (
+            raw->header.dwType ==
+            RIM_TYPEMOUSE
+            )
         {
             const RAWMOUSE& mouse =
                 raw->data.mouse;
-
 
             const USHORT flags =
                 mouse.usButtonFlags;
 
 
-            if (flags & RI_MOUSE_LEFT_BUTTON_DOWN)
+            if (
+                flags &
+                RI_MOUSE_LEFT_BUTTON_DOWN
+                )
             {
                 PlaySoundNow();
             }
 
 
-            if (flags & RI_MOUSE_RIGHT_BUTTON_DOWN)
+            if (
+                flags &
+                RI_MOUSE_RIGHT_BUTTON_DOWN
+                )
             {
                 PlaySoundNow();
             }
 
 
-            if (flags & RI_MOUSE_MIDDLE_BUTTON_DOWN)
+            if (
+                flags &
+                RI_MOUSE_MIDDLE_BUTTON_DOWN
+                )
             {
                 PlaySoundNow();
             }
 
 
-            if (flags & RI_MOUSE_BUTTON_4_DOWN)
+            if (
+                flags &
+                RI_MOUSE_BUTTON_4_DOWN
+                )
             {
                 PlaySoundNow();
             }
 
 
-            if (flags & RI_MOUSE_BUTTON_5_DOWN)
+            if (
+                flags &
+                RI_MOUSE_BUTTON_5_DOWN
+                )
             {
                 PlaySoundNow();
             }
@@ -941,19 +1144,21 @@ static LRESULT CALLBACK WindowProc(
         // KEYBOARD
         // ====================================================
 
-        if (raw->header.dwType == RIM_TYPEKEYBOARD)
+        if (
+            raw->header.dwType ==
+            RIM_TYPEKEYBOARD
+            )
         {
             const RAWKEYBOARD& keyboard =
                 raw->data.keyboard;
-
 
             UINT vk =
                 keyboard.VKey;
 
 
-            // --------------------------------------------
+            // ------------------------------------------------
             // KEY UP
-            // --------------------------------------------
+            // ------------------------------------------------
 
             if (
                 keyboard.Flags &
@@ -969,9 +1174,9 @@ static LRESULT CALLBACK WindowProc(
             }
 
 
-            // --------------------------------------------
-            // KEY DOWN
-            // --------------------------------------------
+            // ------------------------------------------------
+            // INVALID KEY
+            // ------------------------------------------------
 
             if (vk >= 256)
             {
@@ -979,68 +1184,28 @@ static LRESULT CALLBACK WindowProc(
             }
 
 
-            // =================================================
-            // ESC = EXIT
-            // =================================================
-        if (vk == VK_ESCAPE)
-        {
-            // 정적(static) 변수를 사용하여 함수가 끝나도 값과 시간을 유지합니다.
-            static int escCount = 0;
-            static ULONGLONG lastEscTime = 0;
-
-            ULONGLONG currentTime = GetTickCount64(); // 현재 시간을 밀리초(ms) 단위로 가져옴
-
-            // 이전 입력으로부터 2000밀리초(2초)가 지났다면 카운트를 1로 초기화
-            if (currentTime - lastEscTime > 2000)
-            {
-                escCount = 1;
-            }
-            else
-            {
-                escCount++; // 2초 이내에 다시 눌렸다면 카운트 증가
-            }
-
-            lastEscTime = currentTime; // 마지막으로 누른 시간 업데이트
-
-            // 3번 연속으로 눌렸을 때만 종료 프로세스 실행
-            if (escCount >= 3)
-            {
-                g_running.store(
-                    false,
-                    std::memory_order_relaxed
-                );
-
-                PostMessageW(
-                    hwnd,
-                    WM_CLOSE,
-                    0,
-                    0
-                );
-
-                escCount = 0; // 카운트 초기화
-                return 0;
-            }
-
-            return 0; // 3번 미만으로 눌렸을 때는 종료하지 않고 리턴
-        }
+            // ------------------------------------------------
+            // ESC 종료 기능 제거됨
+            //
+            // ESC도 일반 키와 똑같이 처리된다.
+            // ------------------------------------------------
 
 
-            // --------------------------------------------
-            // 자동 반복 무시
-            // --------------------------------------------
+            // ------------------------------------------------
+            // KEY REPEAT BLOCK
+            // ------------------------------------------------
 
             if (g_keyDown[vk])
             {
                 return 0;
             }
 
-
             g_keyDown[vk] = true;
 
 
-            // --------------------------------------------
+            // ------------------------------------------------
             // KEY SOUND
-            // --------------------------------------------
+            // ------------------------------------------------
 
             PlaySoundNow();
 
@@ -1056,7 +1221,7 @@ static LRESULT CALLBACK WindowProc(
     // DESTROY
     // ========================================================
 
-    if (message == WM_DESTROY)
+    case WM_DESTROY:
     {
         g_running.store(
             false,
@@ -1066,6 +1231,7 @@ static LRESULT CALLBACK WindowProc(
         PostQuitMessage(0);
 
         return 0;
+    }
     }
 
 
@@ -1088,13 +1254,6 @@ int WINAPI WinMain(
     LPSTR,
     int)
 {
-    std::wcout
-        << L"========================================\n"
-        << L"                 KeySound\n"
-        << L"        Keyboard + Mouse Sound\n"
-        << L"========================================\n\n";
-
-
     // ========================================================
     // COM
     // ========================================================
@@ -1107,13 +1266,6 @@ int WINAPI WinMain(
 
     if (FAILED(hr))
     {
-        std::wcerr
-            << L"COM initialization failed.\n"
-            << L"HRESULT = 0x"
-            << std::hex
-            << static_cast<unsigned long>(hr)
-            << L"\n";
-
         return 1;
     }
 
@@ -1130,13 +1282,6 @@ int WINAPI WinMain(
 
     if (FAILED(hr))
     {
-        std::wcerr
-            << L"Media Foundation initialization failed.\n"
-            << L"HRESULT = 0x"
-            << std::hex
-            << static_cast<unsigned long>(hr)
-            << L"\n";
-
         CoUninitialize();
 
         return 1;
@@ -1147,19 +1292,12 @@ int WINAPI WinMain(
     // FILE SELECT
     // ========================================================
 
-    std::wcout
-        << L"Select an MP3 or WAV file...\n";
-
-
     std::wstring filename =
         SelectAudioFile();
 
 
     if (filename.empty())
     {
-        std::wcout
-            << L"No file selected.\n";
-
         MFShutdown();
         CoUninitialize();
 
@@ -1167,19 +1305,9 @@ int WINAPI WinMain(
     }
 
 
-    std::wcout
-        << L"\nSelected:\n"
-        << filename
-        << L"\n\n";
-
-
     // ========================================================
     // DECODE
     // ========================================================
-
-    std::wcout
-        << L"Decoding audio...\n";
-
 
     hr =
         DecodeAudio(
@@ -1190,17 +1318,6 @@ int WINAPI WinMain(
 
     if (FAILED(hr))
     {
-        std::wcerr
-            << L"\n========================================\n"
-            << L"          AUDIO DECODING FAILED\n"
-            << L"========================================\n"
-            << L"HRESULT = 0x"
-            << std::hex
-            << static_cast<unsigned long>(hr)
-            << L"\n"
-            << L"========================================\n";
-
-
         MFShutdown();
         CoUninitialize();
 
@@ -1212,10 +1329,6 @@ int WINAPI WinMain(
     // XAUDIO2
     // ========================================================
 
-    std::wcout
-        << L"Initializing XAudio2...\n";
-
-
     hr =
         XAudio2Create(
             &g_xaudio,
@@ -1226,13 +1339,6 @@ int WINAPI WinMain(
 
     if (FAILED(hr))
     {
-        std::wcerr
-            << L"XAudio2 initialization failed.\n"
-            << L"HRESULT = 0x"
-            << std::hex
-            << static_cast<unsigned long>(hr)
-            << L"\n";
-
         MFShutdown();
         CoUninitialize();
 
@@ -1252,13 +1358,6 @@ int WINAPI WinMain(
 
     if (FAILED(hr))
     {
-        std::wcerr
-            << L"Master voice creation failed.\n"
-            << L"HRESULT = 0x"
-            << std::hex
-            << static_cast<unsigned long>(hr)
-            << L"\n";
-
         g_xaudio.Reset();
 
         MFShutdown();
@@ -1272,27 +1371,15 @@ int WINAPI WinMain(
     // VOICE POOL
     // ========================================================
 
-    std::wcout
-        << L"Creating "
-        << VOICE_COUNT
-        << L" voices...\n";
-
-
     if (!CreateVoicePool())
     {
-        std::wcerr
-            << L"Voice pool creation failed.\n";
-
-
         DestroyVoicePool();
-
 
         if (g_masterVoice)
         {
             g_masterVoice->DestroyVoice();
             g_masterVoice = nullptr;
         }
-
 
         g_xaudio.Reset();
 
@@ -1322,22 +1409,25 @@ int WINAPI WinMain(
     windowClass.lpszClassName =
         CLASS_NAME;
 
+    windowClass.hCursor =
+        LoadCursorW(
+            nullptr,
+            IDC_ARROW
+        );
+
+    windowClass.hbrBackground =
+        nullptr;
+
 
     if (!RegisterClassW(&windowClass))
     {
-        std::wcerr
-            << L"RegisterClassW failed.\n";
-
-
         DestroyVoicePool();
-
 
         if (g_masterVoice)
         {
             g_masterVoice->DestroyVoice();
             g_masterVoice = nullptr;
         }
-
 
         g_xaudio.Reset();
 
@@ -1349,41 +1439,45 @@ int WINAPI WinMain(
 
 
     // ========================================================
-    // MESSAGE-ONLY WINDOW
+    // CREATE TRANSPARENT X WINDOW
     // ========================================================
 
     HWND hwnd =
         CreateWindowExW(
-            0,
+            WS_EX_LAYERED |
+            WS_EX_TOOLWINDOW |
+            WS_EX_TOPMOST,
+
             CLASS_NAME,
+
             L"KeySound",
+
+            WS_POPUP,
+
             0,
             0,
-            0,
-            0,
-            0,
-            HWND_MESSAGE,
+
+            WINDOW_WIDTH,
+            WINDOW_HEIGHT,
+
             nullptr,
+            nullptr,
+
             instance,
+
             nullptr
         );
 
 
     if (!hwnd)
     {
-        std::wcerr
-            << L"CreateWindowExW failed.\n";
-
-
         DestroyVoicePool();
-
 
         if (g_masterVoice)
         {
             g_masterVoice->DestroyVoice();
             g_masterVoice = nullptr;
         }
-
 
         g_xaudio.Reset();
 
@@ -1392,6 +1486,77 @@ int WINAPI WinMain(
 
         return 1;
     }
+
+
+    // ========================================================
+    // COLOR KEY TRANSPARENCY
+    // ========================================================
+
+    if (
+        !SetLayeredWindowAttributes(
+            hwnd,
+            TRANSPARENT_COLOR,
+            0,
+            LWA_COLORKEY
+        )
+        )
+    {
+        DestroyWindow(hwnd);
+
+        DestroyVoicePool();
+
+        if (g_masterVoice)
+        {
+            g_masterVoice->DestroyVoice();
+            g_masterVoice = nullptr;
+        }
+
+        g_xaudio.Reset();
+
+        MFShutdown();
+        CoUninitialize();
+
+        return 1;
+    }
+
+
+    // ========================================================
+    // 화면 오른쪽 위에 배치
+    // ========================================================
+
+    RECT workArea{};
+
+    SystemParametersInfoW(
+        SPI_GETWORKAREA,
+        0,
+        &workArea,
+        0
+    );
+
+
+    const int x =
+        workArea.right -
+        WINDOW_WIDTH -
+        WINDOW_MARGIN;
+
+
+    const int y =
+        workArea.top +
+        WINDOW_MARGIN;
+
+
+    SetWindowPos(
+        hwnd,
+        HWND_TOPMOST,
+
+        x,
+        y,
+
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+
+        SWP_SHOWWINDOW
+    );
 
 
     // ========================================================
@@ -1401,12 +1566,15 @@ int WINAPI WinMain(
     RAWINPUTDEVICE devices[2]{};
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // KEYBOARD
-    // ========================================================
+    // --------------------------------------------------------
 
-    devices[0].usUsagePage = 0x01;
-    devices[0].usUsage = 0x06;
+    devices[0].usUsagePage =
+        0x01;
+
+    devices[0].usUsage =
+        0x06;
 
     devices[0].dwFlags =
         RIDEV_INPUTSINK;
@@ -1415,12 +1583,15 @@ int WINAPI WinMain(
         hwnd;
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // MOUSE
-    // ========================================================
+    // --------------------------------------------------------
 
-    devices[1].usUsagePage = 0x01;
-    devices[1].usUsage = 0x02;
+    devices[1].usUsagePage =
+        0x01;
+
+    devices[1].usUsage =
+        0x02;
 
     devices[1].dwFlags =
         RIDEV_INPUTSINK;
@@ -1430,7 +1601,7 @@ int WINAPI WinMain(
 
 
     // ========================================================
-    // REGISTER BOTH
+    // REGISTER RAW INPUT
     // ========================================================
 
     if (
@@ -1441,21 +1612,15 @@ int WINAPI WinMain(
         )
         )
     {
-        std::wcerr
-            << L"RegisterRawInputDevices failed.\n";
-
-
         DestroyWindow(hwnd);
 
         DestroyVoicePool();
-
 
         if (g_masterVoice)
         {
             g_masterVoice->DestroyVoice();
             g_masterVoice = nullptr;
         }
-
 
         g_xaudio.Reset();
 
@@ -1464,32 +1629,6 @@ int WINAPI WinMain(
 
         return 1;
     }
-
-
-    // ========================================================
-    // READY
-    // ========================================================
-
-    std::wcout
-        << L"\n========================================\n"
-        << L"                  READY\n"
-        << L"========================================\n\n";
-
-    std::wcout
-        << L"Keyboard:\n"
-        << L"  Any key -> Sound\n"
-        << L"  Key repeat -> Ignored\n"
-        << L"  ESC -> EXIT\n\n";
-
-    std::wcout
-        << L"Mouse:\n"
-        << L"  Left Click   -> Sound\n"
-        << L"  Right Click  -> Sound\n"
-        << L"  Middle Click -> Sound\n"
-        << L"  XButton 1    -> Sound\n"
-        << L"  XButton 2    -> Sound\n"
-        << L"  Mouse Move   -> Nothing\n"
-        << L"  Wheel        -> Nothing\n\n";
 
 
     // ========================================================
@@ -1524,17 +1663,31 @@ int WINAPI WinMain(
 
 
     // Keyboard
-    removeDevices[0].usUsagePage = 0x01;
-    removeDevices[0].usUsage = 0x06;
-    removeDevices[0].dwFlags = RIDEV_REMOVE;
-    removeDevices[0].hwndTarget = nullptr;
+    removeDevices[0].usUsagePage =
+        0x01;
+
+    removeDevices[0].usUsage =
+        0x06;
+
+    removeDevices[0].dwFlags =
+        RIDEV_REMOVE;
+
+    removeDevices[0].hwndTarget =
+        nullptr;
 
 
     // Mouse
-    removeDevices[1].usUsagePage = 0x01;
-    removeDevices[1].usUsage = 0x02;
-    removeDevices[1].dwFlags = RIDEV_REMOVE;
-    removeDevices[1].hwndTarget = nullptr;
+    removeDevices[1].usUsagePage =
+        0x01;
+
+    removeDevices[1].usUsage =
+        0x02;
+
+    removeDevices[1].dwFlags =
+        RIDEV_REMOVE;
+
+    removeDevices[1].hwndTarget =
+        nullptr;
 
 
     RegisterRawInputDevices(
@@ -1564,6 +1717,7 @@ int WINAPI WinMain(
     if (g_masterVoice)
     {
         g_masterVoice->DestroyVoice();
+
         g_masterVoice = nullptr;
     }
 
